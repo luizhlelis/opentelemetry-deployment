@@ -1,0 +1,36 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel-collector-load-balancer
+  namespace: observability
+spec:
+  mode: deployment
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.94.0
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+
+    exporters:
+      loadbalancing:
+        protocol:
+          otlp:
+            timeout: 1s
+            tls:
+              insecure: true
+        resolver:
+          static:
+            hostnames:
+            - collector-01-collector.observability.svc.cluster.local:4317
+            - collector-02-collector.observability.svc.cluster.local:4317
+      
+    service:
+      pipelines:
+        traces:
+          receivers:
+            - otlp
+          processors: []
+          exporters:
+            - loadbalancing

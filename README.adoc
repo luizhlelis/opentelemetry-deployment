@@ -24,7 +24,7 @@ To start the mini-kube cluster, run:
 minikube start
 ```
 
-The OTEL operator requires a TLS certificate manager to be installed in the cluster. To install [cert-manager](https://cert-manager.io/docs/installation/)
+The OTEL operator requires a TLS certificate manager to be installed in the cluster. To install https://cert-manager.io/docs/installation/[cert-manager]
 in your cluster, run:
 
 ```bash

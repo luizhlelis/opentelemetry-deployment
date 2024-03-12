@@ -1,0 +1,52 @@
+= OpenTelemetry deployment patterns
+
+Here you'll find the source code from the `DevOps Fest` presentation about different ways of deploying the OpenTelemetry collector. The slides can be found on link:open-telemetry-deployment-patterns.pdf[this repository].
+
+== Pre requisites
+
+- All the examples run in a kubernetes cluster, you can use https://minikube.sigs.k8s.io/docs/handbook/config/[minikube], https://kind.sigs.k8s.io/[kind] or any other kubernetes cluster.
+
+== Patterns
+
+- link:./00-no-collector/[#0, No collector]
+- link:./01-agent/[#1, Agent]
+- link:./02-gateway/[#2, Gateway]
+- link:./03-k8s-sidecar/[#3, K8S Sidecar]
+- link:./04-k8s-daemon-set/[#4, K8S DaemonSet]
+- link:./05-load-balancer/[#5, Load Balancer]
+- link:./06-per-signal/[#6, Per Signal]
+
+== Useful commands
+
+To start the mini-kube cluster, run:
+
+```bash
+minikube start
+```
+
+The OTEL operator requires a TLS certificate manager to be installed in the cluster. To install [cert-manager](https://cert-manager.io/docs/installation/)
+in your cluster, run:
+
+```bash
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.1/cert-manager.yaml
+```
+
+The samples from the current repo use the version `0.95.0` from the OTEL operator. To install it in your cluster, run:
+
+```bash
+kubectl apply -f https://github.com/open-telemetry/opentelemetry-operator/releases/download/v0.95.0/opentelemetry-operator.yaml
+```
+
+The command above will install the OTEL operator, create a new namespace called `opentelemetry-operator-system` and deploy the operator in it.
+
+Create a new namespace for the applications:
+
+```bash
+kubectl create namespace all-applications
+```
+
+Create a new namespace for the observability tools:
+
+```bash
+kubectl create namespace observability
+```
